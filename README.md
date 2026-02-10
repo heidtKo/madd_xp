@@ -32,24 +32,33 @@ The `mxp` tool allows you to inspect Copado Data Templates by providing either t
 
 ### Basic Command Structure
 
+The tool uses a nested command structure starting with `mxp`.
+
+### 1. Get Template Objects
+
+Extracts objects from Data Templates and generates a CSV/JSON report.
+
 ```bash
-mxp -u <ORG_ALIAS> [INPUT_FLAGS] [OUTPUT_FLAGS]
+mxp template get template objects -u <ORG_ALIAS> [INPUT_FLAGS] [OUTPUT_FLAGS]
 ```
 
-### 1. Input Methods
+**Input Methods**
 
 You must provide at least one template to process using either names or IDs.
 
 **By Template Name (`-t`)**
 ```bash
 # Single template
-mxp -u cpdXpress -t "MADD Stress Main"
+mxp template get template objects -u cpdXpress -t "MADD Stress Main"
 
 # Multiple templates
-mxp -u cpdXpress -t "Template A" "Template B"
+mxp template get template objects -u cpdXpress -t "Template A" "Template B"
+```
 
-# JSON Array string
-mxp -u cpdXpress -t '["Template A", "Template B"]'
+**By Record ID (`-i`)**
+```bash
+# Single ID
+mxp template get template objects -u cpdXpress -i a0UQH000005LJXs2AO
 ```
 
 **By Record ID (`-i`)**

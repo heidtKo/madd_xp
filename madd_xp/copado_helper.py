@@ -4,6 +4,19 @@ import requests
 import os
 from simple_salesforce import Salesforce
 
+def parse_arg_list(arg_list):
+    """Helper to parse JSON or list inputs."""
+    if not arg_list:
+        return []
+    if len(arg_list) == 1:
+        try:
+            parsed = json.loads(arg_list[0])
+            if isinstance(parsed, list):
+                return parsed
+        except json.JSONDecodeError:
+            pass
+    return arg_list
+
 def get_sf_cli_credentials(org_alias):
     """Retrieves access token and instance URL from SF CLI."""
     try:

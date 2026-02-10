@@ -9,24 +9,9 @@ try:
 except ImportError:
     import copado_helper as helper
 
-def parse_arg_list(arg_list):
-    """Helper to parse JSON or list inputs."""
-    if not arg_list:
-        return []
-    if len(arg_list) == 1:
-        try:
-            parsed = json.loads(arg_list[0])
-            if isinstance(parsed, list):
-                return parsed
-        except json.JSONDecodeError:
-            pass
-    return arg_list
-
-def get_arg_parser():
-    parser = argparse.ArgumentParser(
-        description="Extract objects from Copado Data Templates",
-        formatter_class=argparse.RawTextHelpFormatter,
-        epilog="""EXAMPLES:
+def add_args(parser):
+    """Adds arguments to the provided parser."""
+    parser.epilog = """EXAMPLES:
   # Run with a single template name
   mxp -u cpdXpress -t "MADD Stress Main"
 
@@ -39,7 +24,6 @@ def get_arg_parser():
   # Run with JSON input and custom output path
   mxp -u cpdXpress -t '["Template A", "Template B"]' -o ./export/results.csv
 """
-    )
 
     auth_group = parser.add_argument_group('Authentication')
     auth_group.add_argument("-u", "--username", required=True, help="Salesforce CLI Org Alias (e.g., cpdXpress)")
@@ -52,20 +36,24 @@ def get_arg_parser():
     output_group.add_argument("-o", "--output", default=None, metavar="PATH", help="Path to output file.\nDefault: objects_list.csv (or .json)")
     output_group.add_argument("--json", action="store_true", help="Output results in JSON format instead of CSV.")
 
+def get_arg_parser():
+    parser = argparse.ArgumentParser(
+        description="Extract objects from Copado Data Templates",
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+    add_args(parser)
     return parser
 
-def main():
+def run(args):
     # --- 1. Parameters ---
-    parser = get_arg_parser()
-    args = parser.parse_args()
-
     if not args.templates and not args.recordId:
-        parser.error("At least one of --templates or --recordId is required.")
+        print("Error: At least one of --templates or --recordId is required.")
+        return
 
     ORG_ALIAS = args.username
 
-    ROOT_TEMPLATE_NAMES = parse_arg_list(args.templates)
-    ROOT_TEMPLATE_IDS = parse_arg_list(args.recordId)
+    ROOT_TEMPLATE_NAMES = helper.parse_arg_list(args.templates)
+    ROOT_TEMPLATE_IDS = helper.parse_arg_list(args.recordId)
     
     ATTACHMENT_NAME = "Template Detail"
     TEMP_FOLDER_NAME = "Temp_Template_Files"
@@ -253,6 +241,11 @@ def main():
         
     except IOError as e:
         print(f"Error writing CSV file: {e}")
+
+def main():
+    parser = get_arg_parser()
+    args = parser.parse_args()
+    run(args)
 
 if __name__ == "__main__":
     main()

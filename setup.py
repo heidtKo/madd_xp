@@ -10,7 +10,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "mxp=madd_xp.get_objects_in_template:main",
+            "mxp=madd_xp.cli:main",
         ]
     },
 )

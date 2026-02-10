@@ -1,6 +1,7 @@
 import unittest
 import argparse
-from madd_xp.get_objects_in_template import parse_arg_list, get_arg_parser
+from madd_xp.copado_helper import parse_arg_list
+from madd_xp.get_objects_in_template import get_arg_parser
 
 class TestCliLogic(unittest.TestCase):
 
