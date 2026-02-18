@@ -24,3 +24,4 @@ objects_list.csv
 *.log
 
 .sample_stuff
+POC/analyze_copado_files.py

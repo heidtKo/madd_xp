@@ -70,5 +70,17 @@ class TestCliLogic(unittest.TestCase):
         _, active = mock_run.call_args[0]
         self.assertFalse(active)
 
+    @patch('madd_xp.analyze_files.run')
+    def test_cli_analytics_files(self, mock_run):
+        """Test 'mxp analytics files' command parsing"""
+        test_args = ['mxp', 'analytics', 'files', '-u', 'myOrg', '-o', 'report.csv']
+        with patch.object(sys, 'argv', test_args):
+            cli_main()
+            
+        self.assertTrue(mock_run.called)
+        args = mock_run.call_args[0][0]
+        self.assertEqual(args.username, 'myOrg')
+        self.assertEqual(args.output, 'report.csv')
+
 if __name__ == '__main__':
     unittest.main()

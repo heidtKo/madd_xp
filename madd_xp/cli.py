@@ -3,9 +3,11 @@ import sys
 try:
     from . import get_objects_in_template
     from . import update_template_status
+    from . import analyze_files
 except ImportError:
     import get_objects_in_template
     import update_template_status
+    import analyze_files
 
 def main():
     parser = argparse.ArgumentParser(prog="mxp", description="MADD XP CLI Tool")
@@ -37,6 +39,15 @@ def main():
     objects_parser = get_template_subparsers.add_parser("objects", help="Get objects in template")
     get_objects_in_template.add_args(objects_parser)
     objects_parser.set_defaults(func=get_objects_in_template.run)
+
+    # Level 1: analytics
+    analytics_parser = subparsers.add_parser("analytics", help="Analytics operations")
+    analytics_subparsers = analytics_parser.add_subparsers(dest="command_analytics", required=True)
+
+    # Level 2: files
+    files_parser = analytics_subparsers.add_parser("files", help="Analyze file usage")
+    analyze_files.add_args(files_parser)
+    files_parser.set_defaults(func=analyze_files.run)
 
     args = parser.parse_args()
     if hasattr(args, 'func'):
