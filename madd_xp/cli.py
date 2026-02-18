@@ -4,10 +4,12 @@ try:
     from . import get_objects_in_template
     from . import update_template_status
     from . import analyze_files
+    from . import find_templates
 except ImportError:
     import get_objects_in_template
     import update_template_status
     import analyze_files
+    import find_templates
 
 def main():
     parser = argparse.ArgumentParser(prog="mxp", description="MADD XP CLI Tool")
@@ -39,6 +41,11 @@ def main():
     objects_parser = get_template_subparsers.add_parser("objects", help="Get objects in template")
     get_objects_in_template.add_args(objects_parser)
     objects_parser.set_defaults(func=get_objects_in_template.run)
+
+    # Level 2: find
+    find_parser = template_subparsers.add_parser("find", help="Find templates referencing specific objects")
+    find_templates.add_args(find_parser)
+    find_parser.set_defaults(func=find_templates.run)
 
     # Level 1: analytics
     analytics_parser = subparsers.add_parser("analytics", help="Analytics operations")

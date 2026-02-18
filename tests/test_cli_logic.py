@@ -82,5 +82,19 @@ class TestCliLogic(unittest.TestCase):
         self.assertEqual(args.username, 'myOrg')
         self.assertEqual(args.output, 'report.csv')
 
+    @patch('madd_xp.find_templates.run')
+    def test_cli_template_find(self, mock_run):
+        """Test 'mxp template find' command parsing"""
+        test_args = ['mxp', 'template', 'find', '-u', 'myOrg', '-obj', 'Account', 'Contact', '--active', '--json']
+        with patch.object(sys, 'argv', test_args):
+            cli_main()
+            
+        self.assertTrue(mock_run.called)
+        args = mock_run.call_args[0][0]
+        self.assertEqual(args.username, 'myOrg')
+        self.assertEqual(args.objects, ['Account', 'Contact'])
+        self.assertTrue(args.active)
+        self.assertTrue(args.json)
+
 if __name__ == '__main__':
     unittest.main()
