@@ -25,3 +25,5 @@ objects_list.csv
 
 .sample_stuff
 POC/analyze_copado_files.py
+helper_files/copado_object_schema.json
+feature_planning/sync_files_to_git.txt
